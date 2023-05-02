@@ -36,42 +36,34 @@
 
 <script>
 //Your code goes here 
-	const itemsContainer = document.querySelector('.items');
-	  let isDragging = false;
-    let startPosition = 0;
-    let currentTranslate = 0;
-    let prevTranslate = 0;
+	const items = document.querySelector('.items');
+let isDown = false;
+let startX;
+let scrollLeft;
 
-    const handleMouseDown = (event) => {
-      isDragging = true;
-      startPosition = event.clientX;
-      prevTranslate = currentTranslate;
-      itemsContainer.style.cursor = 'grabbing';
-    }
+items.addEventListener('mousedown', (e) => {
+  isDown = true;
+  startX = e.pageX - items.offsetLeft;
+  scrollLeft = items.scrollLeft;
+});
 
-    const handleMouseMove = (event) => {
-      if (isDragging) {
-        const distance = event.clientX - startPosition;
-        currentTranslate = prevTranslate + distance;
-        itemsContainer.style.transform = `translateX(${currentTranslate}px)`;
-      }
-    }
+items.addEventListener('mouseleave', () => {
+  isDown = false;
+});
 
-    const handleMouseUp = () => {
-      isDragging = false;
-      itemsContainer.style.cursor = 'grab';
-    }
+items.addEventListener('mouseup', () => {
+  isDown = false;
+});
 
-    const handleMouseLeave = () => {
-      isDragging = false;
-      itemsContainer.style.cursor = 'grab';
-    }
-
-    itemsContainer.addEventListener('mousedown', handleMouseDown);
-    itemsContainer.addEventListener('mousemove', handleMouseMove);
-    itemsContainer.addEventListener('mouseup', handleMouseUp);
-    itemsContainer.addEventListener('mouseleave', handleMouseLeave);
+items.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - items.offsetLeft;
+  const walk = (x - startX) * 2;
+  items.scrollLeft = scrollLeft - walk;
+});
 </script>
+
 
   </body>
 </html>
